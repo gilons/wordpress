@@ -77,9 +77,15 @@ $table_prefix = 'wp_';
  *
  * @link https://wordpress.org/support/article/debugging-in-wordpress/
  */
-define( 'WP_DEBUG', false );
+define( 'WP_DEBUG', true );
+//define('SAVEQUERIES', true);
+define('WP_MEMORY_LIMIT', '32M');
 
 /* That's all, stop editing! Happy publishing. */
+
+@ini_set('log_errors', 'On');
+@ini_set('display_errors', 'On');
+@ini_set('error_log', '~/Downloads/wordpress/php_error.log');
 
 /** Absolute path to the WordPress directory. */
 if ( ! defined( 'ABSPATH' ) ) {
@@ -88,3 +94,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
+
+add_filter('https_ssl_verify', '__return_false');
+add_filter('https_local_ssl_verify', '__return_false');
+
