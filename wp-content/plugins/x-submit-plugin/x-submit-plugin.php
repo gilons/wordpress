@@ -22,8 +22,8 @@ GNU General Public License for more details.
  */
 
 add_action("init", "x_submit_voting_plugin_activated");
-$GLOBALS['x_submit_base_url'] = "https://localhost/";
-$GLOBALS['x-submit.com'] = "https://x-submit.com";
+$GLOBALS['x_submit_base_url'] = "https://x-submit.com/";
+$GLOBALS['x-submit.com'] = "https://x-submit.com/";
 $GLOBALS['current_votes_url'] = get_bloginfo('url') . "/wp-admin/admin.php?page=current-votings";
 $GLOBALS['x_submit_config_url'] = get_bloginfo('url') . "/wp-admin/options-general.php?page=x_submit_voting_main_menu";
 
@@ -71,7 +71,6 @@ add_action("wp_enqueue_scripts", 'load_x_submit_voting_scripts');
 function my_admin_bar_link()
 {
     global $wp_admin_bar;
-    global $post;
     if (!is_super_admin() || !is_admin_bar_showing()) {
         return;
     }
@@ -210,8 +209,8 @@ $x_submit_voting_options = get_option("x_submit_voting_options");
     $decoded_body = json_decode($tem_body, true);
     //die("current".is_string($tem_body));
     if (isset($tem_body) &&
-        strlen($tem_body) > 0 && (isset($decoded_body) && 
-        sizeof($decoded_body) > 0)) {
+        strlen($tem_body) > 0 && (isset($decoded_body) &&
+            sizeof($decoded_body) > 0)) {
         //print("setting remote values");
         $body = $tem_body;
         $x_submit_current_votes["current_votings"] = $body;
@@ -219,7 +218,8 @@ $x_submit_voting_options = get_option("x_submit_voting_options");
         $body = json_decode($body, true);
         ?>
         <div class="x-submit-voting-connection-container">
-        <p class="x-submit-voting-connection-success">These votings are in synch with <a href="<?php echo $GLOBALS['x-submit.com'] ?>">X-Sibmit.com</a></p>
+        <p class="x-submit-voting-connection-success">These votings are in sync with <a href="<?php echo $GLOBALS['x-submit.com'] ?>">X-Sibmit.com</a></p>
+        <?php x_submit_success_link_coppied() ?>
 <button type="button" class="button-primary" onclick="reloadPage()">Reload Votings Table</button>
 </div>
 <?php
@@ -233,6 +233,7 @@ $x_submit_voting_options = get_option("x_submit_voting_options");
 <p class="x-submit-connection-error">Please check your internet connection or click <a href="<?php
 echo $GLOBALS['x_submit_config_url'] ?>">here</a> to update your access token</p>
 </div>
+<?php x_submit_success_link_coppied()?>
 <button type="button" class="button-primary reload-x-submit-votings-button" onclick="reloadPage()">Reload Votings Table</button>
 </div>
 <?php
@@ -303,7 +304,7 @@ echo $GLOBALS['x_submit_config_url'] ?>">here</a> to update your access token</p
 } else if (isset($body) && sizeof($body) > 0) {
 
         ?>
-<form method="post" action="options.php">
+<form method="post" id="x-sumbit-current-votings-form" action="options.php">
     <?php settings_fields("x-submit-voting-current-votes-group");?>
     <table class="widefat fixed" cellspacing="0">
         <thead>
@@ -359,7 +360,8 @@ $key = $key + 1;
     <input type="hidden" name='x_submit_current_votes[current_votings]'
         value="<?php echo esc_attr($x_submit_current_votes['current_votings']); ?>" />
     <p class="submit">
-        <input type="submit" class="button-primary" value="Save Votings" />
+        <input type="submit" name="dosubmit" class="button-primary" id="x-submit-save-voting" value="Save Votings" />
+        <?php x_submit_success_message() ?>
     </p>
 </form>
 <?php
@@ -468,18 +470,32 @@ function add_x_submit_voting_js()
         'your-script', // name your script so that you can attach other scripts and de-register, etc.
         plugin_dir_url(__FILE__) . '/js/x-submit-voting.js', // this is the location of your script file
         array('jquery'), // this array lists the scripts upon which your script depends,
-        '1.1.0'
+        '1.1.1'
     );
 }
 
-function load_x_submit_voting_scripts(){
+function load_x_submit_voting_scripts()
+{
     load_x_submit_voting_css();
     add_x_submit_voting_js();
+}
+
+function x_submit_success_message()
+{
+    ?>
+    <div  style="display:none" class="x-submit-voting-saved-message" id="x-success-msg">Values saved successfully !</div>
+    <?php
+}
+
+function x_submit_success_link_coppied(){
+    ?>
+    <div id="x-code-copied-success-msg" style="display:none" class="x-submit-success-copy-msg">Short copied successfully !</div>
+    <?php
 }
 
 function load_x_submit_voting_css()
 {
     wp_enqueue_style('x-submit-voting-styles',
         plugin_dir_url(__FILE__) . '/css/x-submit-voting.css',
-        [], '1.0.1');
+        [], '1.0.5');
 }

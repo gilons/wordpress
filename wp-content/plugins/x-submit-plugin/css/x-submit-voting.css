@@ -47,3 +47,27 @@
     color:aliceblue;
     margin-left:auto
 }
+.x-submit-voting-saved-message{
+    min-width: 200px;
+    padding: 5px;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    justify-content: center;
+    background-color: green;
+    border-radius: 5px;
+    text-align: center;
+
+}
+.x-submit-success-copy-msg{
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    justify-content: center;
+    background-color: green;
+    border-radius: 5px;
+     padding: 5px;
+    text-align: center;
+}
