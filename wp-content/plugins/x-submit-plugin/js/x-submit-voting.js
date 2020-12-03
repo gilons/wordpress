@@ -47,7 +47,7 @@ function loadIframeHeight(id) {
     if (iframe) {
         window.addEventListener("message", (event) => {
             if (event.origin == x_submit && event.data.id == id) {
-                iframe.height = (parseFloat(event.data.height) + 50).toString() + "px"
+                //iframe.height = (parseFloat(event.data.height) + 50).toString() + "px"
             }
         })
         iframe.contentWindow.postMessage(id, x_submit)
